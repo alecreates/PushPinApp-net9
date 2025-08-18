@@ -8,15 +8,16 @@ namespace API.Data.Migrations
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
+        /// updates database
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
