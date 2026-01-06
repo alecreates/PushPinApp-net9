@@ -8,7 +8,7 @@ namespace API.Controllers
     [Authorize]
     public class MembersController(IMemberRepository memberRepository) : BaseApiController
     {
-        [HttpGet]
+        [HttpGet] // localhost:5001/api/members
         public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
         {
             return Ok(await memberRepository.GetMembersAsync());
