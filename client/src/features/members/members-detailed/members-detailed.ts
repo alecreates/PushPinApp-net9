@@ -1,8 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { Member } from '../../../types/member';
 import { AgePipe } from '../../../core/pipes/age-pipe';
+import { AccountService } from '../../../core/services/account-service';
+import { MemberService } from '../../../core/services/member-service';
 
 @Component({
   selector: 'app-members-detailed',
@@ -11,16 +13,18 @@ import { AgePipe } from '../../../core/pipes/age-pipe';
   styleUrl: './members-detailed.css'
 })
 export class MembersDetailed implements OnInit{
+  private accountService = inject(AccountService);
+  protected memberService = inject(MemberService);
   // Access to route parameters
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  protected member = signal<Member | undefined>(undefined)
   protected title = signal<string | undefined>('Profile');
+  // compare current User ID with snapshot param map id 
+  protected isCurrentUser = computed(() => {
+    return this.accountService.currentUser()?.id === this.route.snapshot.paramMap.get('id');
+  })
 
   ngOnInit(): void {
-    this.route.data.subscribe({
-      next: data => this.member.set(data['member'])
-    })
     this.title.set(this.route.firstChild?.snapshot?.title)
 
     this.router.events.pipe(
